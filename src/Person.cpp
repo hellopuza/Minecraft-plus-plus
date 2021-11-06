@@ -9,11 +9,6 @@ Person::Person(float camera_fov, float aspect_ratio, vec3f position) :
     updateCameraPos();
 }
 
-void Person::updateCameraPos()
-{
-    camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_);
-}
-
 void Person::turnHead(vec2f delta)
 {
     camera_.direction_.x += delta.x * PI * 2.0F;
@@ -32,6 +27,19 @@ void Person::setPosition(vec3f position)
 vec3f Person::getPosition() const
 {
     return position_;
+}
+
+void Person::updateCameraPos()
+{
+    camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_);
+}
+
+void Person::shaking(vec3f movement)
+{
+    static float route = 0.0F;
+    route = loop(route + movement.magnitute(), -PI, PI);
+    camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_ + 0.05F * std::sin(3.0F * route));
+    printf("%f\n", route);
 }
 
 void Person::move(const sf::Event& event, const World& world)
@@ -92,8 +100,11 @@ void Person::move(const sf::Event& event, const World& world)
     collideWalls(world, camera_.position_, movement);
 
     position_ += movement;
-    updateCameraPos();
 
+    if (staying_)
+        shaking(movement);
+    else
+        updateCameraPos();
 }
 
 void Person::collideFloor(const World& world)

@@ -26,10 +26,12 @@ inline const T& clamp (const T& value, const T& min, const T& max)
 }
 
 template <typename T>
-inline void loop (T& value, const T& min, const T& max)
+inline T loop (const T& value, const T& min, const T& max)
 {
-    while (value > max) value = value - max + min;
-    while (value < min) value = value + max - min;
+    T val = value;
+    while (val > max) val = val - max + min;
+    while (val < min) val = val + max - min;
+    return val;
 }
 
 } // namespace puza

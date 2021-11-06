@@ -44,6 +44,7 @@ struct vec2 final
         return vec2(k * x,
                     k * y);
     }
+
     vec2 operator / (T k) const
     {
         return vec2(x / k,

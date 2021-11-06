@@ -12,7 +12,7 @@ Camera::Camera(float fov, float aspect_ratio) :
 void Camera::updateDirection()
 {
     direction_.y = clamp(direction_.y, -PI / 2.0F + 0.01F, PI / 2.0F - 0.01F);
-    loop(direction_.x, -PI, PI);
+    direction_.x = loop(direction_.x, -PI, PI);
 
     forward_ = vec3f(std::cos(direction_.y) * std::cos(direction_.x),
                      std::cos(direction_.y) * std::sin(-direction_.x),

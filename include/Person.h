@@ -23,6 +23,7 @@ public:
 private:
 
     void updateCameraPos();
+    void shaking(vec3f movement);
     void collideFloor(const World& world);
     void collideRoof(const World& world);
     static void collideWalls(const World& world, vec3f origin, vec3f& direction);
