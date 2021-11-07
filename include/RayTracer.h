@@ -45,14 +45,14 @@ private:
 
     std::vector<Light> lights_;
 
-    World* world_;
+    World*  world_;
+    Camera* camera_;
 
     sf::Shader shader_;
     sf::RenderTexture render_texture_;
 
 public:
 
-    Camera*    camera_;
     sf::Sprite sprite_;
 };
 

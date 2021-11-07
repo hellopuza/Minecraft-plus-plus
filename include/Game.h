@@ -22,7 +22,7 @@ constexpr size_t       MAX_BLOCK_SET_DISTANCE = 16;
 
 const vec3f START_PERSON_POSITION = vec3f(20.5F, 40.5F, 2.0F);
 
-const char * const DEFAULT_WORLD_NAME = "worlds/world.dat";
+const char * const DEFAULT_WORLD_NAME = "assets/worlds/world.dat";
 
 const sf::String TITLE_STRING = "Minecraft++";
 

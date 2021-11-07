@@ -39,7 +39,6 @@ void Person::shaking(vec3f movement)
     static float route = 0.0F;
     route = loop(route + movement.magnitute(), -PI, PI);
     camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_ + 0.05F * std::sin(3.0F * route));
-    printf("%f\n", route);
 }
 
 void Person::move(const sf::Event& event, const World& world)

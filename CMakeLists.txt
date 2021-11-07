@@ -15,10 +15,7 @@ file(GLOB_RECURSE HEADERS *.h*)
 add_executable(${EXEC_NAME} ${SOURCES})
 target_include_directories(${EXEC_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-set(RESOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/textures
-    ${CMAKE_CURRENT_SOURCE_DIR}/worlds
-)
+set(RESOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 file(COPY ${RESOURCE_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -32,13 +29,7 @@ if(ADD_SANITIZERS)
     set_target_properties(${EXEC_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address")
 endif()
 
-find_package(SFML 2.5.1 REQUIRED
-    COMPONENTS
-        graphics
-        window
-        system
-        audio
-)
+find_package(SFML 2.5.1 REQUIRED COMPONENTS graphics window system audio)
 
 include_directories(${SFML_INCLUDE_DIR})
 target_link_libraries(${EXEC_NAME} PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
