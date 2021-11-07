@@ -138,14 +138,14 @@ void Game::run()
             }
         }
         static float t = 0;
-        t += 1 / (fps_.current_ + 1.0F);
+        t += 1 / (fps_.current() + 1.0F);
         ray_tracer_.setLightColor(rgb(powf(sinf(11.0F * t), 2.0F), powf(sinf(3.0F * t), 2.0F), powf(sinf(5.0F * t), 2.0F)), 1);
 
         if (not mouse_visible_) person_.move(event, world_);
 
         ray_tracer_.draw(window_);
         fps_.update();
-        fps_.draw(window_);
+        window_.draw(fps_);
 
         drawCross();
 

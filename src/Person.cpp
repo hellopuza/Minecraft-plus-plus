@@ -66,10 +66,20 @@ void Person::move(const sf::Event& event, const World& world)
 
     float speed = boost ? BOOST_SPEED_ : LINE_SPEED_;
 
-    if (wasd_control[0]) velocity_ += speed * vec3f(camera_.getForward().x, camera_.getForward().y, 0.0F).normalize();
-    if (wasd_control[1]) velocity_ += speed * vec3f(camera_.getRight().x,   camera_.getRight().y,   0.0F).normalize();
-    if (wasd_control[2]) velocity_ -= speed * vec3f(camera_.getForward().x, camera_.getForward().y, 0.0F).normalize();
-    if (wasd_control[3]) velocity_ -= speed * vec3f(camera_.getRight().x,   camera_.getRight().y,   0.0F).normalize();
+    vec2f velocity;
+    velocity.x = +(static_cast<float>(wasd_control[0]) - static_cast<float>(wasd_control[2])) * camera_.getForward().x
+                 +(static_cast<float>(wasd_control[1]) - static_cast<float>(wasd_control[3])) * camera_.getRight().x;
+
+    velocity.y = +(static_cast<float>(wasd_control[0]) - static_cast<float>(wasd_control[2])) * camera_.getForward().y
+                 +(static_cast<float>(wasd_control[1]) - static_cast<float>(wasd_control[3])) * camera_.getRight().y;
+
+    if (wasd_control[0] || wasd_control[1] || wasd_control[2] || wasd_control[3])
+    {
+        velocity.normalize();
+    }
+
+    velocity *= speed;
+    velocity_ = vec3f(velocity.x, velocity.y, velocity_.z);
 
     if (jump && staying_)
     {
@@ -77,9 +87,6 @@ void Person::move(const sf::Event& event, const World& world)
         jump = false;
         staying_ = false;
     }
-
-    velocity_.x *= SPEED_RESISTANCE_;
-    velocity_.y *= SPEED_RESISTANCE_;
 
     static sf::Clock delta_time_clock;
     float delta_time = delta_time_clock.restart().asSeconds();

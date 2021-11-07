@@ -30,10 +30,9 @@ private:
     static void collideWall(const World& world, Intersection intersection, vec3f origin, vec3f& direction);
 
     const float HEIGHT_ = 1.7F;
-    const float LINE_SPEED_ = 0.08F;
-    const float BOOST_SPEED_ = 2.2F * LINE_SPEED_;
+    const float LINE_SPEED_ = 3.6F;
+    const float BOOST_SPEED_ = 1.8F * LINE_SPEED_;
     const float JUMP_SPEED_ = 5.0F;
-    const float SPEED_RESISTANCE_ = 0.98F;
     const float GRAVITY_ACCELERATION_ = 12.0F;
     const float HEIGHT_CORRECTION_ = 0.1F;
 

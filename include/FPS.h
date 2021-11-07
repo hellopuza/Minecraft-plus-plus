@@ -5,17 +5,17 @@
 
 namespace puza {
 
-class FPS final
+class FPS final : public sf::Drawable
 {
 public:
 
     FPS(const sf::Font& font, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
         unsigned int size = 20, sf::Color color = sf::Color::White);
 
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update();
-    void draw(sf::RenderWindow& window) const;
+    float current();
 
-    float current_ = 0.0f;
     bool is_visible_ = true;
 
 private:
@@ -24,6 +24,7 @@ private:
     sf::Text  fps_text_;
     const sf::Font& font_;
 
+    float current_ = 0.0f;
     size_t frame_num_ = 0;
 };
 

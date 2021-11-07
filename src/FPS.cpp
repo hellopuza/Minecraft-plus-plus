@@ -13,6 +13,11 @@ FPS::FPS(const sf::Font& font, sf::Vector2f position, unsigned int size, sf::Col
     fps_text_.setFont(font_);
 }
 
+void FPS::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    if (is_visible_) target.draw(fps_text_, states);
+}
+
 void FPS::update()
 {
     ++frame_num_;
@@ -30,9 +35,9 @@ void FPS::update()
     }
 }
 
-void FPS::draw(sf::RenderWindow& window) const
+float FPS::current()
 {
-    if (is_visible_) window.draw(fps_text_);
+    return current_;
 }
 
 } // namespace puza
