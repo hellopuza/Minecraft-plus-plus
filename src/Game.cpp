@@ -15,7 +15,7 @@ Game::Game() :
 {
     window_.setMouseCursorVisible(mouse_visible_);
 
-    font_.loadFromMemory(arial_ttf, arial_ttf_len);
+    font_.loadFromFile(FONT_DESTINATION);
 
     ray_tracer_.addLight(vec3f(900.0F, -3500.0F, 2800.0F), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
     ray_tracer_.addLight(vec3f(42.5F, 54.5F, 3.5F), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
@@ -237,9 +237,7 @@ void Game::drawCross()
     position.setFillColor(sf::Color::White);
     position.setPosition(sf::Vector2f(100.0F, 0.0F));
 
-    sf::Font font;
-    font.loadFromMemory(arial_ttf, arial_ttf_len);
-    position.setFont(font);
+    position.setFont(font_);
 
     char pos[512] = "";
     sprintf(pos, "x: %.2f, y: %.2f, z: %.2f\n", person_.getPosition().x, person_.getPosition().y, person_.getPosition().z);

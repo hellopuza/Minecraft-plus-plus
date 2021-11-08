@@ -11,7 +11,7 @@ RayTracer::RayTracer(const vec2u& winsizes, World* world, Camera* camera, size_t
     camera_   (camera)
 {
     render_texture_.create(winsizes.x, winsizes.y);
-    sprite_ = sf::Sprite(render_texture_.getTexture());
+    frame_ = sf::Sprite(render_texture_.getTexture());
 }
 
 void RayTracer::updateWinSizes(const vec2u& winsizes)
@@ -19,7 +19,7 @@ void RayTracer::updateWinSizes(const vec2u& winsizes)
     winsizes_ = winsizes;
 
     render_texture_.create(winsizes.x, winsizes.y);
-    sprite_ = sf::Sprite(render_texture_.getTexture());
+    frame_ = sf::Sprite(render_texture_.getTexture());
 }
 
 void RayTracer::draw(sf::RenderWindow& window)
@@ -30,8 +30,8 @@ void RayTracer::draw(sf::RenderWindow& window)
     setCamera();
     setScene();
 
-    render_texture_.draw(sprite_, &shader_);
-    window.draw(sprite_);
+    render_texture_.draw(frame_, &shader_);
+    window.draw(frame_);
 }
 
 void RayTracer::addLight(const vec3f& position, const rgb& color, float diff_intensity, float spec_intensity)

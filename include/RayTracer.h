@@ -9,7 +9,7 @@
 
 namespace puza {
 
-class RayTracer
+class RayTracer final
 {
 public:
 
@@ -53,7 +53,7 @@ private:
 
 public:
 
-    sf::Sprite sprite_;
+    sf::Sprite frame_;
 };
 
 } // namespace puza
