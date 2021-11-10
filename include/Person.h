@@ -34,7 +34,7 @@ private:
     const float BOOST_SPEED_ = 1.8F * LINE_SPEED_;
     const float JUMP_SPEED_ = 5.0F;
     const float GRAVITY_ACCELERATION_ = 12.0F;
-    const float HEIGHT_CORRECTION_ = 0.1F;
+    const float HEIGHT_CORRECTION_ = 0.05F;
 
     vec3f position_;
     vec3f velocity_;

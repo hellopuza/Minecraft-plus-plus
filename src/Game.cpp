@@ -14,6 +14,8 @@ Game::Game() :
 {
     window_.setMouseCursorVisible(mouse_visible_);
 
+    person_.setPosition(vec3f(person_.getPosition().x, person_.getPosition().y, person_.getPosition().z + 0.1F));
+
     font_.loadFromFile(FONT_DESTINATION);
 
     ray_tracer_.addLight(SUN_POSITION + person_.getPosition(), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
@@ -117,10 +119,10 @@ void Game::run()
                 int current_block = event.mouseWheel.delta + current_block_;
 
                 while (current_block > static_cast<int>(MATERIALS_NUM) - 1)
-                    current_block = current_block - static_cast<int>(MATERIALS_NUM) + 1;
+                    current_block -= static_cast<int>(MATERIALS_NUM) - 1;
 
-                while (current_block_ < 1)
-                    current_block = current_block + static_cast<int>(MATERIALS_NUM) - 1;
+                while (current_block < 1)
+                    current_block += static_cast<int>(MATERIALS_NUM) - 1;
 
                 current_block_ = static_cast<block_t>(current_block);
             }
@@ -234,9 +236,10 @@ void Game::drawCross()
     position.setFont(font_);
 
     char pos[512] = "";
-    sprintf(pos, "x: %.2f, y: %.2f, z: %.2f\n", person_.getPosition().x - static_cast<float>(START_CHUNK_POS.x),
-                                                person_.getPosition().y - static_cast<float>(START_CHUNK_POS.y), 
-                                                person_.getPosition().z);
+    sprintf(pos, "x: %.2f, y: %.2f, z: %.2f, block: %s\n",
+        person_.getPosition().x - static_cast<float>(START_CHUNK_POS.x),
+        person_.getPosition().y - static_cast<float>(START_CHUNK_POS.y), person_.getPosition().z, MATERIALS[current_block_].name);
+
     position.setString(pos);
     window_.draw(position);
 }
