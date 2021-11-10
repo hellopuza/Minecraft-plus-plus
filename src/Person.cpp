@@ -41,7 +41,7 @@ void Person::shaking(vec3f movement)
     camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_ + 0.05F * std::sin(3.0F * route));
 }
 
-void Person::move(const sf::Event& event, const World& world)
+void Person::move(const sf::Event& event, World& world)
 {
     bool wasd_control[4] = {};
     bool jump = false;
@@ -73,7 +73,7 @@ void Person::move(const sf::Event& event, const World& world)
     velocity.y = +(static_cast<float>(wasd_control[0]) - static_cast<float>(wasd_control[2])) * camera_.getForward().y
                  +(static_cast<float>(wasd_control[1]) - static_cast<float>(wasd_control[3])) * camera_.getRight().y;
 
-    if (wasd_control[0] || wasd_control[1] || wasd_control[2] || wasd_control[3])
+    if ((wasd_control[0] ^ wasd_control[2]) || (wasd_control[1] ^ wasd_control[3]))
     {
         velocity.normalize();
     }
@@ -113,7 +113,7 @@ void Person::move(const sf::Event& event, const World& world)
         updateCameraPos();
 }
 
-void Person::collideFloor(const World& world)
+void Person::collideFloor(World& world)
 {
     Intersection intersection(Ray(position_, vec3f(0.0F, 0.0F, -1.0F)));
     if (intersection.intersect(world, 2) && (position_.z - intersection.point().z < HEIGHT_CORRECTION_ * 1.1F))
@@ -125,7 +125,7 @@ void Person::collideFloor(const World& world)
     else staying_ = false;
 }
 
-void Person::collideRoof(const World& world)
+void Person::collideRoof(World& world)
 {
     Intersection intersection(Ray(camera_.position_, vec3f(0.0F, 0.0F, 1.0F)));
     if (intersection.intersect(world, 1) && (intersection.point().z - camera_.position_.z < HEIGHT_CORRECTION_))
@@ -135,7 +135,7 @@ void Person::collideRoof(const World& world)
     }
 }
 
-void Person::collideWalls(const World& world, vec3f origin, vec3f& direction)
+void Person::collideWalls(World& world, vec3f origin, vec3f& direction)
 {
     Intersection intersection_x(Ray(origin, vec3f(direction.x, 0.0F, 0.0F).normalized()));
     Intersection intersection_y(Ray(origin, vec3f(0.0F, direction.y, 0.0F).normalized()));
@@ -144,7 +144,7 @@ void Person::collideWalls(const World& world, vec3f origin, vec3f& direction)
     collideWall(world, intersection_y, origin, direction);
 }
 
-void Person::collideWall(const World& world, Intersection intersection, vec3f origin, vec3f& direction)
+void Person::collideWall(World& world, Intersection intersection, vec3f origin, vec3f& direction)
 {
     if (intersection.intersect(world, 1))
     {

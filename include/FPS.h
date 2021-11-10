@@ -14,7 +14,7 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update();
-    float current();
+    float current() const;
 
     bool is_visible_ = true;
 

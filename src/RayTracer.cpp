@@ -22,7 +22,7 @@ void RayTracer::updateWinSizes(const vec2u& winsizes)
     frame_ = sf::Sprite(render_texture_.getTexture());
 }
 
-void RayTracer::draw(sf::RenderWindow& window)
+void RayTracer::draw(sf::RenderTarget& target)
 {
     shader_.setUniform("winsizes", sf::Glsl::Vec2(winsizes_.x, winsizes_.y));
 
@@ -31,7 +31,7 @@ void RayTracer::draw(sf::RenderWindow& window)
     setScene();
 
     render_texture_.draw(frame_, &shader_);
-    window.draw(frame_);
+    target.draw(frame_);
 }
 
 void RayTracer::addLight(const vec3f& position, const rgb& color, float diff_intensity, float spec_intensity)
@@ -86,11 +86,13 @@ char* RayTracer::writeShader()
         "const uint  RAY_RANGE     = %luu;\n"                  /* 2 */
         "const uint  LIGHTS_NUM    = %luu;\n"                  /* 3 */
         "const uint  MATERIALS_NUM = %luu;\n"                  /* 4 */
-        "const uvec3 WORLD_SIZE    = uvec3(%uu, %uu, %uu);\n"  /* 5, 6, 7 */
+        "const uvec3 CHUNK_SIZE    = uvec3(%uu, %uu, %uu);\n"  /* 5, 6, 7 */
+        "const uvec2 MAP_SIZE      = uvec2(CHUNK_SIZE.x * CHUNK_SIZE.y / 4u, CHUNK_SIZE.z);\n"
         "\n"
-        "uniform vec2  winsizes;\n"
-        "uniform ivec2 mapsizes;\n"
-        "uniform sampler2D world;\n"
+        "uniform vec2 winsizes;\n"
+        "\n"
+        "uniform sampler2D chunks[4u];\n"
+        "uniform ivec2 CENTER_CHUNK_POS;\n"
         "\n"
         "struct Material\n"
         "{\n"
@@ -104,9 +106,18 @@ char* RayTracer::writeShader()
         "\n"
         "uint getBlock(uvec3 point)\n"
         "{\n"
-        "    uint offset = (point.z * WORLD_SIZE.x * WORLD_SIZE.y + point.y * WORLD_SIZE.x + point.x) / 4u;\n"
-        "    uvec2 block_pos = uvec2(offset %% uint(mapsizes.x), offset / uint(mapsizes.x));\n"
-        "    vec4 block_quarter = texture2D(world, vec2(float(block_pos.x) / mapsizes.x, float(block_pos.y) / mapsizes.y));\n"
+        "    uint chunk_ind = uint(point.x >= uint(CENTER_CHUNK_POS.x)) + 2u * uint(point.y < uint(CENTER_CHUNK_POS.y));\n"
+        "    point = uvec3(point.x %% CHUNK_SIZE.x, point.y %% CHUNK_SIZE.y, point.z);\n"
+        "    uint offset = (point.z * CHUNK_SIZE.x * CHUNK_SIZE.y + point.y * CHUNK_SIZE.x + point.x) / 4u;\n"
+        "    uvec2 block_pos = uvec2(offset %% uint(MAP_SIZE.x), offset / uint(MAP_SIZE.x));\n"
+        "    vec4 block_quarter;\n"
+        "    switch (chunk_ind)\n"
+        "    {\n"
+        "    case 0u: block_quarter = texture2D(chunks[0u], vec2(float(block_pos.x) / MAP_SIZE.x, float(block_pos.y) / MAP_SIZE.y)); break;\n"
+        "    case 1u: block_quarter = texture2D(chunks[1u], vec2(float(block_pos.x) / MAP_SIZE.x, float(block_pos.y) / MAP_SIZE.y)); break;\n"
+        "    case 2u: block_quarter = texture2D(chunks[2u], vec2(float(block_pos.x) / MAP_SIZE.x, float(block_pos.y) / MAP_SIZE.y)); break;\n"
+        "    case 3u: block_quarter = texture2D(chunks[3u], vec2(float(block_pos.x) / MAP_SIZE.x, float(block_pos.y) / MAP_SIZE.y)); break;\n"
+        "    }\n"
         "    uint block = point.x %% 4u;\n"
         "    if (block == 0u) return uint(block_quarter.x * 255.0); else\n"
         "    if (block == 1u) return uint(block_quarter.y * 255.0); else\n"
@@ -187,10 +198,6 @@ char* RayTracer::writeShader()
         "        current_pos += step * min_t_max;\n"
         "        t_max += min_t_max / dir;\n"
         "\n"
-        "        if ((current_pos.x > float(WORLD_SIZE.x)) || (current_pos.x < 0.0) ||\n"
-        "            (current_pos.y > float(WORLD_SIZE.y)) || (current_pos.y < 0.0) ||\n"
-        "            (current_pos.z > float(WORLD_SIZE.z)) || (current_pos.z < 0.0))\n"
-        "            return false;\n"
         "        uvec3 block_pos = uvec3(current_pos);\n"
         "        uint block_id = getBlock(block_pos);\n"
         "\n"
@@ -312,7 +319,7 @@ char* RayTracer::writeShader()
         "void main()\n"
         "{\n"
         "    gl_FragColor = vec4(renderPoint(gl_FragCoord.xy), 1.0);\n"
-        "}\n", ray_depth_, ray_range_, lights_.size(), MATERIALS_NUM, world_->size().x, world_->size().y, world_->size().z,
+        "}\n", ray_depth_, ray_range_, lights_.size(), MATERIALS_NUM, WORLD_CHUNK_SIZE.x, WORLD_CHUNK_SIZE.y, WORLD_CHUNK_SIZE.z,
                texture_switch, lights_loop, render_point_loops);
 
     delete [] texture_switch;
@@ -387,9 +394,13 @@ void RayTracer::setScene()
         shader_.setUniform(var, lights_[i].specular_intensity);
     }
 
-    shader_.setUniform("world", world_->getMap());
-    shader_.setUniform("mapsizes", sf::Glsl::Ivec2(static_cast<int>(world_->getMapSize().x),
-                                                   static_cast<int>(world_->getMapSize().y)));
+    vec2i center_chunk_pos = world_->getCenterChunkPos();
+    shader_.setUniform("CENTER_CHUNK_POS", sf::Glsl::Ivec2(center_chunk_pos.x, center_chunk_pos.y));
+
+    shader_.setUniform("chunks[0]", world_->getMap_0());
+    shader_.setUniform("chunks[1]", world_->getMap_1());
+    shader_.setUniform("chunks[2]", world_->getMap_2());
+    shader_.setUniform("chunks[3]", world_->getMap_3());
 
     delete [] var;
 }

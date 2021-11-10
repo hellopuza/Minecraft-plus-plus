@@ -14,7 +14,7 @@ public:
     Person(float camera_fov, float aspect_ratio, vec3f position);
 
     void turnHead(vec2f delta);
-    void move(const sf::Event& event, const World& world);
+    void move(const sf::Event& event, World& world);
     void setPosition(vec3f position);
     vec3f getPosition() const;
 
@@ -24,10 +24,10 @@ private:
 
     void updateCameraPos();
     void shaking(vec3f movement);
-    void collideFloor(const World& world);
-    void collideRoof(const World& world);
-    static void collideWalls(const World& world, vec3f origin, vec3f& direction);
-    static void collideWall(const World& world, Intersection intersection, vec3f origin, vec3f& direction);
+    void collideFloor(World& world);
+    void collideRoof(World& world);
+    static void collideWalls(World& world, vec3f origin, vec3f& direction);
+    static void collideWall(World& world, Intersection intersection, vec3f origin, vec3f& direction);
 
     const float HEIGHT_ = 1.7F;
     const float LINE_SPEED_ = 3.6F;

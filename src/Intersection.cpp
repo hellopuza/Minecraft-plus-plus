@@ -4,7 +4,7 @@ namespace puza {
 
 Intersection::Intersection(const Ray& ray) : ray_(ray) {}
 
-bool Intersection::intersect(const World& world, size_t max_depth)
+bool Intersection::intersect(World& world, size_t max_depth)
 {
     vec3f current_pos = ray_.origin;
     vec3f dir = abs(ray_.direction);
@@ -31,13 +31,6 @@ bool Intersection::intersect(const World& world, size_t max_depth)
 
         current_pos += step * min_t_max;
         t_max += min_t_max / dir;
-
-        if ((current_pos.x > static_cast<float>(world.size().x)) || (current_pos.x < 0.0) ||
-            (current_pos.y > static_cast<float>(world.size().y)) || (current_pos.y < 0.0) ||
-            (current_pos.z > static_cast<float>(world.size().z)) || (current_pos.z < 0.0))
-        {
-            return false;
-        }
 
         vec3f block_pos = vec3f(vec3i(current_pos));
 

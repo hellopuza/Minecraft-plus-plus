@@ -2,6 +2,7 @@
 #define VEC3_H
 
 #include <cmath>
+#include <functional>
 
 namespace puza {
 
@@ -153,16 +154,13 @@ inline vec3<T> operator * (T k, const vec3<T>& v)
 template <typename T>
 inline vec3<T> sign (const vec3<T>& v)
 {
-    #define ZERO    static_cast<T>(0)
-    #define POS_ONE static_cast<T>(+1)
-    #define NEG_ONE static_cast<T>(-1)
+    const T ZERO    = static_cast<T>(0);
+    const T POS_ONE = static_cast<T>(+1);
+    const T NEG_ONE = static_cast<T>(-1);
 
     return vec3<T>((v.x > ZERO) ? POS_ONE : (v.x < ZERO) ? NEG_ONE : ZERO,
                    (v.y > ZERO) ? POS_ONE : (v.y < ZERO) ? NEG_ONE : ZERO,
                    (v.z > ZERO) ? POS_ONE : (v.z < ZERO) ? NEG_ONE : ZERO);
-    #undef ZERO
-    #undef POS_ONE
-    #undef NEG_ONE
 }
 
 template <typename T>
@@ -183,5 +181,30 @@ typedef vec3<double>   vec3d;
 typedef vec3<unsigned> vec3u;
 
 } // namespace puza
+
+namespace std {
+
+template <typename T>
+struct hash<puza::vec3<T>>
+{
+    size_t operator()(const puza::vec3<T>& key) const
+    {
+        size_t x = hash<T>()(key.x);
+        size_t y = hash<T>()(key.y);
+        size_t z = hash<T>()(key.z);
+        return (x * y * z) + (x ^ y ^ z);
+    }
+};
+
+template <typename T>
+struct equal_to<puza::vec3<T>>
+{
+    constexpr bool operator()(const puza::vec3<T>& lhs, const puza::vec3<T>& rhs) const
+    {
+        return lhs == rhs;
+    }
+};
+
+} // namespace std
 
 #endif // VEC3_H

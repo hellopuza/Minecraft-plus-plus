@@ -17,7 +17,7 @@ public:
 
     void updateWinSizes(const vec2u& winsizes);
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& target);
 
     void addLight(const vec3f& position, const rgb& color, float diff_intensity, float spec_intensity);
 

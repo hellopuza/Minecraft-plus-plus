@@ -5,9 +5,8 @@ namespace puza {
 Game::Game() :
     winsizes_     ({ DEFAULT_WIDTH, DEFAULT_HEIGHT }),
     window_       (sf::VideoMode(winsizes_.x, winsizes_.y), TITLE_STRING),
-    world_        (DEFAULT_WORLD_NAME),
     person_       (DEFAULT_CAMERA_FOV, static_cast<float>(winsizes_.x) / static_cast<float>(winsizes_.y),
-                   START_PERSON_POSITION),
+                   world_.load(DEFAULT_WORLD_NAME)),
     ray_tracer_   (winsizes_, &world_, &person_.camera_, DEFAULT_RAY_DEPTH, DEFAULT_RAY_RANGE),
     fps_          (font_, sf::Vector2f(0.0F, 0.0F), 16, sf::Color::White),
     mouse_visible_(false),
@@ -17,11 +16,7 @@ Game::Game() :
 
     font_.loadFromFile(FONT_DESTINATION);
 
-    ray_tracer_.addLight(vec3f(900.0F, -3500.0F, 2800.0F), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
-    ray_tracer_.addLight(vec3f(42.5F, 54.5F, 3.5F), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
-
-    world_.update();
-
+    ray_tracer_.addLight(SUN_POSITION + person_.getPosition(), rgb(1.0F, 1.0F, 1.0F), 1.0F, 1.0F);
     ray_tracer_.makeShader();
 }
 
@@ -104,7 +99,6 @@ void Game::run()
                     if (block_pos != vec3i(person_.getPosition()) && block_pos != vec3i(person_.camera_.position_))
                     {
                         world_.setBlock(cam_intersection.block_pos() + relative_block_center, current_block_);
-                        world_.update();
                     }
                 }
             }
@@ -114,7 +108,6 @@ void Game::run()
                 if (cam_intersection.intersect(world_, MAX_BLOCK_SET_DISTANCE))
                 {
                     world_.setBlock(cam_intersection.block_pos(), BLOCK_AIR);
-                    world_.update();
                 }
             }
 
@@ -137,13 +130,14 @@ void Game::run()
                 person_.setPosition(START_PERSON_POSITION);
             }
         }
-        static float t = 0;
-        t += 1 / (fps_.current() + 1.0F);
-        ray_tracer_.setLightColor(rgb(powf(sinf(11.0F * t), 2.0F), powf(sinf(3.0F * t), 2.0F), powf(sinf(5.0F * t), 2.0F)), 1);
 
         if (not mouse_visible_) person_.move(event, world_);
+        world_.update(person_.getPosition());
+
+        ray_tracer_.setLightPosition(SUN_POSITION + person_.getPosition(), 0);
 
         ray_tracer_.draw(window_);
+
         fps_.update();
         window_.draw(fps_);
 
@@ -152,7 +146,7 @@ void Game::run()
         window_.display();
     }
 
-    world_.save(DEFAULT_WORLD_NAME);
+    world_.save();
 }
 
 void Game::updateWinSizes(const vec2u& size)
@@ -240,7 +234,9 @@ void Game::drawCross()
     position.setFont(font_);
 
     char pos[512] = "";
-    sprintf(pos, "x: %.2f, y: %.2f, z: %.2f\n", person_.getPosition().x, person_.getPosition().y, person_.getPosition().z);
+    sprintf(pos, "x: %.2f, y: %.2f, z: %.2f\n", person_.getPosition().x - static_cast<float>(START_CHUNK_POS.x),
+                                                person_.getPosition().y - static_cast<float>(START_CHUNK_POS.y), 
+                                                person_.getPosition().z);
     position.setString(pos);
     window_.draw(position);
 }

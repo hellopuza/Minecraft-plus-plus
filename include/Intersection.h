@@ -12,7 +12,7 @@ public:
 
     Intersection(const Ray& ray);
 
-    bool intersect(const World& world, size_t max_depth);
+    bool intersect(World& world, size_t max_depth);
 
     vec3f point() const;
     vec3f normal() const;

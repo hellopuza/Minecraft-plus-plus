@@ -35,7 +35,7 @@ void FPS::update()
     }
 }
 
-float FPS::current()
+float FPS::current() const
 {
     return current_;
 }
