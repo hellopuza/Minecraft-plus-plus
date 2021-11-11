@@ -26,7 +26,6 @@ void RayTracer::draw(sf::RenderTarget& target)
 {
     shader_.setUniform("winsizes", sf::Glsl::Vec2(winsizes_.x, winsizes_.y));
 
-    setMaterials();
     setCamera();
     setScene();
 
@@ -64,6 +63,7 @@ void RayTracer::makeShader()
     char* str_shader = writeShader();
 
     shader_.loadFromMemory(str_shader, sf::Shader::Fragment);
+    setMaterials();
 
     delete [] str_shader;
 }

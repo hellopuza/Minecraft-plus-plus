@@ -14,7 +14,7 @@ Game::Game() :
 {
     window_.setMouseCursorVisible(mouse_visible_);
 
-    person_.setPosition(vec3f(person_.getPosition().x, person_.getPosition().y, person_.getPosition().z + 0.1F));
+    person_.setPosition(vec3f(person_.getPosition().x, person_.getPosition().y, person_.getPosition().z + 0.5F));
 
     font_.loadFromFile(FONT_DESTINATION);
 

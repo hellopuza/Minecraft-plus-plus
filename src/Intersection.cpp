@@ -32,6 +32,11 @@ bool Intersection::intersect(World& world, size_t max_depth)
         current_pos += step * min_t_max;
         t_max += min_t_max / dir;
 
+        if ((current_pos.z < 0.0F) || (current_pos.z > static_cast<float>(WORLD_CHUNK_SIZE.z)))
+        {
+            return false;
+        }
+
         vec3f block_pos = vec3f(vec3i(current_pos));
 
         if (world.getBlock(block_pos) > 0U)

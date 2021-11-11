@@ -18,7 +18,7 @@ void Person::turnHead(vec2f delta)
 
 void Person::setPosition(vec3f position)
 {
-    staying_ = false;
+    staying_ = true;
     position_ = position;
     velocity_ = vec3f(0.0F, 0.0F, 0.0F);
     updateCameraPos();
