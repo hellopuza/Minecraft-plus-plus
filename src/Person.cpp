@@ -41,28 +41,19 @@ void Person::shaking(vec3f movement)
     camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_ + 0.05F * std::sin(3.0F * route));
 }
 
-void Person::move(const sf::Event& event, World& world)
+void Person::move(World& world)
 {
     bool wasd_control[4] = {};
     bool jump = false;
     bool boost = false;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))      wasd_control[0] = true;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))      wasd_control[1] = true;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))      wasd_control[2] = true;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))      wasd_control[3] = true;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))  jump = true;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) boost = true;
+    wasd_control[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+    wasd_control[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    wasd_control[2] = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+    wasd_control[3] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 
-    if (event.type == sf::Event::KeyReleased)
-    {
-        if (event.key.code == sf::Keyboard::W)      wasd_control[0] = false;
-        if (event.key.code == sf::Keyboard::A)      wasd_control[1] = false;
-        if (event.key.code == sf::Keyboard::S)      wasd_control[2] = false;
-        if (event.key.code == sf::Keyboard::D)      wasd_control[3] = false;
-        if (event.key.code == sf::Keyboard::Space)  jump = false;
-        if (event.key.code == sf::Keyboard::LShift) boost = false;
-    }
+    jump  = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+    boost = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 
     float speed = boost ? BOOST_SPEED_ : LINE_SPEED_;
 

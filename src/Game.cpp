@@ -14,7 +14,7 @@ Game::Game() :
 {
     window_.setMouseCursorVisible(mouse_visible_);
 
-    person_.setPosition(vec3f(person_.getPosition().x, person_.getPosition().y, person_.getPosition().z + 0.5F));
+    person_.setPosition(vec3f(person_.getPosition().x, person_.getPosition().y, person_.getPosition().z + 1.0F));
 
     font_.loadFromFile(FONT_DESTINATION);
 
@@ -133,7 +133,7 @@ void Game::run()
             }
         }
 
-        if (not mouse_visible_) person_.move(event, world_);
+        if (not mouse_visible_) person_.move(world_);
         world_.update(person_.getPosition());
 
         ray_tracer_.setLightPosition(SUN_POSITION + person_.getPosition(), 0);

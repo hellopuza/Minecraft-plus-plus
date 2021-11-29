@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <cstdint>
+#include <climits>
 
 namespace puza {
 
@@ -17,19 +18,22 @@ void World::create(const char* location)
 
 vec3f World::load(const char* location)
 {
+    static_assert(CHAR_BIT == 8);
+    static_assert(sizeof(unsigned int) == 4);
+
     location_ = location;
     std::fstream world_file(location_, std::ios::in | std::ios::binary);
 
     world_file.read(reinterpret_cast<char*>(&person_position_), sizeof(person_position_));
 
-    uint32_t chunks_num;
+    unsigned int chunks_num;
     world_file.read(reinterpret_cast<char*>(&chunks_num), sizeof(chunks_num));
 
-    for (uint32_t i = 0; i < chunks_num; i++)
+    for (unsigned int i = 0; i < chunks_num; i++)
     {
         Chunk chunk;
 
-        vec2<uint32_t> chunk_pos;
+        vec2<unsigned int> chunk_pos;
         world_file.read(reinterpret_cast<char*>(&chunk_pos), sizeof(chunk_pos));
 
         for (unsigned int i = 0; i < WORLD_MAP_SIZE.x * WORLD_MAP_SIZE.y; i++)
@@ -49,16 +53,19 @@ vec3f World::load(const char* location)
 
 void World::save() const
 {
+    static_assert(CHAR_BIT == 8);
+    static_assert(sizeof(unsigned int) == 4);
+
     std::fstream world_file(location_, std::ios::out | std::ios::binary);
 
     world_file.write(reinterpret_cast<const char*>(&person_position_), sizeof(person_position_));
 
-    auto chunks_num = static_cast<uint32_t>(chunks_.size());
+    auto chunks_num = static_cast<unsigned int>(chunks_.size());
     world_file.write(reinterpret_cast<char*>(&chunks_num), sizeof(chunks_num));
 
     for (const auto& [key, chunk] : chunks_)
     {
-        vec2<uint32_t> chunk_pos(key);
+        vec2<unsigned int> chunk_pos(key);
         world_file.write(reinterpret_cast<char*>(&chunk_pos), sizeof(chunk_pos));
 
         for (unsigned int i = 0; i < WORLD_MAP_SIZE.x * WORLD_MAP_SIZE.y; i++)

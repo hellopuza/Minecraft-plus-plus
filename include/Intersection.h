@@ -10,7 +10,7 @@ class Intersection final
 {
 public:
 
-    Intersection(const Ray& ray);
+    explicit Intersection(const Ray& ray);
 
     bool intersect(World& world, size_t max_depth);
 

@@ -14,7 +14,7 @@ public:
     Person(float camera_fov, float aspect_ratio, vec3f position);
 
     void turnHead(vec2f delta);
-    void move(const sf::Event& event, World& world);
+    void move(World& world);
     void setPosition(vec3f position);
     vec3f getPosition() const;
 

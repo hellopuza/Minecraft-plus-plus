@@ -9,7 +9,7 @@ class FPS final : public sf::Drawable
 {
 public:
 
-    FPS(const sf::Font& font, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
+    explicit FPS(const sf::Font& font, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
         unsigned int size = 20, sf::Color color = sf::Color::White);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
