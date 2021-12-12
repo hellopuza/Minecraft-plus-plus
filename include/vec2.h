@@ -179,15 +179,6 @@ struct hash<puza::vec2<T>>
     }
 };
 
-template <typename T>
-struct equal_to<puza::vec2<T>>
-{
-    constexpr bool operator()(const puza::vec2<T>& lhs, const puza::vec2<T>& rhs) const
-    {
-        return lhs == rhs;
-    }
-};
-
 } // namespace std
 
 #endif // VEC2_H

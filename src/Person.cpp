@@ -95,6 +95,7 @@ void Person::move(World& world)
 
     collideWalls(world, position_, movement);
     collideWalls(world, camera_.position_, movement);
+    collideWalls(world, (position_ + camera_.position_) / 2.0F, movement);
 
     position_ += movement;
 

@@ -16,7 +16,6 @@ add_executable(${EXEC_NAME} ${SOURCES})
 target_include_directories(${EXEC_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(RESOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/assets)
-
 file(COPY ${RESOURCE_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set_target_properties(${EXEC_NAME} PROPERTIES

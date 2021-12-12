@@ -196,15 +196,6 @@ struct hash<puza::vec3<T>>
     }
 };
 
-template <typename T>
-struct equal_to<puza::vec3<T>>
-{
-    constexpr bool operator()(const puza::vec3<T>& lhs, const puza::vec3<T>& rhs) const
-    {
-        return lhs == rhs;
-    }
-};
-
 } // namespace std
 
 #endif // VEC3_H
