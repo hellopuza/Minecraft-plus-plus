@@ -28,17 +28,17 @@ struct Material final
 
 const Material MATERIALS[] =
 {
-    { TEXTURES_LOCATION[BLOCK_AIR]                   , "Air",                   0.0f, 0.00f, 0.00f },
-    { TEXTURES_LOCATION[BLOCK_BRICKS]                , "Bricks",                0.1f, 0.04f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_CHISELED_STONE_BRICKS] , "Chiseled stone bricks", 0.1f, 0.04f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_COBBLESTONE]           , "Cobblestone",           0.1f, 0.04f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_DIRT]                  , "Dirt",                  0.1f, 0.08f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_GRASS]                 , "Grass",                 0.1f, 0.15f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_MIRROR]                , "Mirror",                0.0f, 0.90f, 0.01f },
-    { TEXTURES_LOCATION[BLOCK_OAK_LOG]               , "Oak log",               0.1f, 0.08f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_OAK_PLANKS]            , "Oak planks",            0.1f, 0.08f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_STONE]                 , "Stone",                 0.1f, 0.04f, 0.03f },
-    { TEXTURES_LOCATION[BLOCK_STONE_BRICKS]          , "Stone bricks",          0.1f, 0.04f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_AIR]                   , "Air",                   0.00f, 0.00f, 0.00f },
+    { TEXTURES_LOCATION[BLOCK_BRICKS]                , "Bricks",                0.13f, 0.01f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_CHISELED_STONE_BRICKS] , "Chiseled stone bricks", 0.13f, 0.01f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_COBBLESTONE]           , "Cobblestone",           0.13f, 0.01f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_DIRT]                  , "Dirt",                  0.13f, 0.01f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_GRASS]                 , "Grass",                 0.13f, 0.01f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_MIRROR]                , "Mirror",                0.00f, 0.93f, 0.01f },
+    { TEXTURES_LOCATION[BLOCK_OAK_LOG]               , "Oak log",               0.13f, 0.00f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_OAK_PLANKS]            , "Oak planks",            0.13f, 0.00f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_STONE]                 , "Stone",                 0.13f, 0.00f, 0.03f },
+    { TEXTURES_LOCATION[BLOCK_STONE_BRICKS]          , "Stone bricks",          0.13f, 0.00f, 0.03f },
 };
 
 constexpr size_t MATERIALS_NUM = sizeof(MATERIALS) / sizeof(Material);

@@ -93,7 +93,7 @@ void World::update(vec3f person_position)
                               current_chunk_pos_.y + WORLD_CHUNK_SIZE.y * (chunks_quarter_offset.y % 2U));
 }
 
-block_t World::getBlock(unsigned int x, unsigned int y, unsigned int z)
+block_t World::getBlock(unsigned int x, unsigned int y, unsigned int z) const
 {
     vec2u chunk_pos((x / WORLD_CHUNK_SIZE.x) * WORLD_CHUNK_SIZE.x, (y / WORLD_CHUNK_SIZE.y) * WORLD_CHUNK_SIZE.y);
     return chunks_[chunk_pos].getBlock(x - chunk_pos.x, y - chunk_pos.y, z);
@@ -107,7 +107,7 @@ void World::setBlock(unsigned int x, unsigned int y, unsigned int z, block_t blo
     chunk->update();
 }
 
-block_t World::getBlock(const vec3u& pos)
+block_t World::getBlock(const vec3u& pos) const
 {
     return getBlock(pos.x, pos.y, pos.z);
 }

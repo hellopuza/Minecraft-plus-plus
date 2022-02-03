@@ -27,10 +27,10 @@ public:
     void save() const;
     void update(vec3f person_position);
 
-    block_t getBlock(unsigned int x, unsigned int y, unsigned int z);
+    block_t getBlock(unsigned int x, unsigned int y, unsigned int z) const;
     void    setBlock(unsigned int x, unsigned int y, unsigned int z, block_t block_id);
 
-    block_t getBlock(const vec3u& pos);
+    block_t getBlock(const vec3u& pos) const;
     void    setBlock(const vec3u& pos, block_t block_id);
 
     vec2u getCenterChunkPos() const;
@@ -57,7 +57,7 @@ private:
         void    setBlock(unsigned int x, unsigned int y, unsigned int z, block_t block_id);
     };
 
-    std::unordered_map<vec2u, Chunk> chunks_;
+    mutable std::unordered_map<vec2u, Chunk> chunks_;
     std::string location_;
 
     vec3f person_position_;

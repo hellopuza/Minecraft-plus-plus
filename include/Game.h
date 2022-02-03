@@ -12,7 +12,7 @@ const vec2u SCREEN_SIZE = vec2u(sf::VideoMode::getDesktopMode().width, sf::Video
 constexpr size_t DEFAULT_WIDTH  = 800;
 constexpr size_t DEFAULT_HEIGHT = 450;
 
-constexpr unsigned int DEFAULT_RAY_DEPTH = 2;
+constexpr unsigned int DEFAULT_RAY_DEPTH = 4;
 constexpr unsigned int DEFAULT_RAY_RANGE = 64;
 constexpr float        DEFAULT_CAMERA_FOV = 33.0F;
 constexpr size_t       MAX_BLOCK_SET_DISTANCE = 16;

@@ -4,7 +4,7 @@ namespace puza {
 
 Intersection::Intersection(const Ray& ray) : ray_(ray) {}
 
-bool Intersection::intersect(World& world, size_t max_depth)
+bool Intersection::intersect(const World& world, size_t max_depth)
 {
     vec3f current_pos = ray_.origin;
     vec3f dir = abs(ray_.direction);

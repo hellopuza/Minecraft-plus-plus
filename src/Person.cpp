@@ -4,7 +4,7 @@ namespace puza {
 
 Person::Person(float camera_fov, float aspect_ratio, vec3f position) :
     camera_(camera_fov * PI / 180.0F, aspect_ratio),
-    position_(position + vec3f(0.0F, 0.0F, HEIGHT_CORRECTION_))
+    position_(position)
 {
     updateCameraPos();
 }
@@ -41,7 +41,7 @@ void Person::shaking(vec3f movement)
     camera_.position_ = position_ + vec3f(0.0F, 0.0F, HEIGHT_ + 0.05F * std::sin(3.0F * route));
 }
 
-void Person::move(World& world)
+void Person::move(const World& world)
 {
     bool wasd_control[4] = {};
     bool jump = false;
@@ -86,16 +86,26 @@ void Person::move(World& world)
 
     vec3f movement = velocity_ * delta_time - vec3f(0.0F, 0.0F, GRAVITY_ACCELERATION_) * delta_time * delta_time / 2.0F;
 
-    collideRoof(world);
-    collideFloor(world);
-    if (staying_ && (movement.z < HEIGHT_CORRECTION_ * HEIGHT_CORRECTION_))
+    if (movement.z > 0.0F)
+        collideRoof(world);
+
+    if (movement.z < 0.0F)
+        collideFloor(world);
+
+    if (staying_)
     {
         movement.z = 0.0F;
     }
 
     collideWalls(world, position_, movement);
     collideWalls(world, camera_.position_, movement);
-    collideWalls(world, (position_ + camera_.position_) / 2.0F, movement);
+    collideWalls(world, (position_ + camera_.position_) / 2.0F + camera_.getRight() * 0.1F, movement);
+    collideWalls(world, (position_ + camera_.position_) / 2.0F - camera_.getRight() * 0.1F, movement);
+
+    if (leaning_ && (movement.z > 0.0F))
+        movement.z *= 1.9F;
+
+    leaning_ = false;
 
     position_ += movement;
 
@@ -105,29 +115,40 @@ void Person::move(World& world)
         updateCameraPos();
 }
 
-void Person::collideFloor(World& world)
+void Person::collideFloor(const World& world)
 {
-    Intersection intersection(Ray(position_, vec3f(0.0F, 0.0F, -1.0F)));
-    if (intersection.intersect(world, 2) && (position_.z - intersection.point().z < HEIGHT_CORRECTION_ * 1.1F))
+    if (position_.z < HEIGHT_CORRECTION_)
     {
         staying_ = true;
-        position_.z = intersection.point().z + HEIGHT_CORRECTION_;
+        position_.z = 0.0F;
+        velocity_.z = 0.0F;
+        return;
+    }
+
+    if (world.getBlock(vec3f(position_.x, position_.y, position_.z - HEIGHT_CORRECTION_)) > 0U)
+    {
+        staying_ = true;
+        position_.z = std::floor(position_.z);
         velocity_.z = 0.0F;
     }
     else staying_ = false;
 }
 
-void Person::collideRoof(World& world)
+void Person::collideRoof(const World& world)
 {
-    Intersection intersection(Ray(camera_.position_, vec3f(0.0F, 0.0F, 1.0F)));
-    if (intersection.intersect(world, 1) && (intersection.point().z - camera_.position_.z < HEIGHT_CORRECTION_))
+    if (position_.z + HEIGHT_ > static_cast<float>(WORLD_CHUNK_SIZE.z))
     {
-        position_.z = intersection.point().z - HEIGHT_ - HEIGHT_CORRECTION_;
+        velocity_.z = 0.0F;
+        return;
+    }
+
+    if (world.getBlock(vec3f(position_.x, position_.y, position_.z + HEIGHT_ + 0.1F)) > 0U)
+    {
         velocity_.z = 0.0F;
     }
 }
 
-void Person::collideWalls(World& world, vec3f origin, vec3f& direction)
+void Person::collideWalls(const World& world, vec3f origin, vec3f& direction)
 {
     Intersection intersection_x(Ray(origin, vec3f(direction.x, 0.0F, 0.0F).normalized()));
     Intersection intersection_y(Ray(origin, vec3f(0.0F, direction.y, 0.0F).normalized()));
@@ -136,13 +157,14 @@ void Person::collideWalls(World& world, vec3f origin, vec3f& direction)
     collideWall(world, intersection_y, origin, direction);
 }
 
-void Person::collideWall(World& world, Intersection intersection, vec3f origin, vec3f& direction)
+void Person::collideWall(const World& world, Intersection& intersection, vec3f origin, vec3f& direction)
 {
     if (intersection.intersect(world, 1))
     {
-        if ((intersection.point() - origin).magnitute() < direction.magnitute() + 0.1F)
+        if ((intersection.point() - origin).magnitute() < direction.magnitute() + 0.2F)
         {
-            direction += direction - 2.0F * dot(direction, intersection.normal()) * intersection.normal();
+            direction -= dot(direction, intersection.normal()) * intersection.normal();
+            leaning_ = true;
         }
     }
 }
