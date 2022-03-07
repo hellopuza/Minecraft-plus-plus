@@ -2,6 +2,7 @@ Checks: >
   -*,
   bugprone-*,
   google-*,
+  llvm-*,
   misc-*,
   modernize-*,
   performance-*,

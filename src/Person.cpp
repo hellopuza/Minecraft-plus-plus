@@ -87,10 +87,10 @@ void Person::move(const World& world)
     vec3f movement = velocity_ * delta_time - vec3f(0.0F, 0.0F, GRAVITY_ACCELERATION_) * delta_time * delta_time / 2.0F;
 
     if (movement.z > 0.0F)
-        collideRoof(world);
+        collideRoof(world, movement.z);
 
     if (movement.z < 0.0F)
-        collideFloor(world);
+        collideFloor(world, movement.z);
 
     if (staying_)
     {
@@ -103,7 +103,7 @@ void Person::move(const World& world)
     collideWalls(world, (position_ + camera_.position_) / 2.0F - camera_.getRight() * 0.1F, movement);
 
     if (leaning_ && (movement.z > 0.0F))
-        movement.z *= 1.9F;
+        movement.z *= 2.0F;
 
     leaning_ = false;
 
@@ -115,7 +115,7 @@ void Person::move(const World& world)
         updateCameraPos();
 }
 
-void Person::collideFloor(const World& world)
+void Person::collideFloor(const World& world, float movement)
 {
     if (position_.z < HEIGHT_CORRECTION_)
     {
@@ -125,7 +125,7 @@ void Person::collideFloor(const World& world)
         return;
     }
 
-    if (world.getBlock(vec3f(position_.x, position_.y, position_.z - HEIGHT_CORRECTION_)) > 0U)
+    if (world.getBlock(vec3f(position_.x, position_.y, position_.z + movement)) > 0U)
     {
         staying_ = true;
         position_.z = std::floor(position_.z);
@@ -134,7 +134,7 @@ void Person::collideFloor(const World& world)
     else staying_ = false;
 }
 
-void Person::collideRoof(const World& world)
+void Person::collideRoof(const World& world, float movement)
 {
     if (position_.z + HEIGHT_ > static_cast<float>(WORLD_CHUNK_SIZE.z))
     {
@@ -142,7 +142,7 @@ void Person::collideRoof(const World& world)
         return;
     }
 
-    if (world.getBlock(vec3f(position_.x, position_.y, position_.z + HEIGHT_ + 0.1F)) > 0U)
+    if (world.getBlock(vec3f(position_.x, position_.y, position_.z + HEIGHT_ + movement + HEIGHT_CORRECTION_)) > 0U)
     {
         velocity_.z = 0.0F;
     }

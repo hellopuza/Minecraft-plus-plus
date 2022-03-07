@@ -15,7 +15,7 @@ struct Material final
     float reflection;
     float flare_size;
 
-    Material (const Texture& texture_, const char* name_, float brightness_ = 1.0f, float reflection_ = 0.0f, float flare_size_ = 25.0f) :
+    Material(const Texture& texture_, const char* name_, float brightness_ = 1.0f, float reflection_ = 0.0f, float flare_size_ = 25.0f) :
         name(name_),
         brightness(brightness_),
         reflection(reflection_),

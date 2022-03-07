@@ -13,9 +13,9 @@ struct vec3 final
     T y = 0;
     T z = 0;
 
-    vec3 () {}
+    vec3() {}
 
-    vec3 (T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
+    vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
     
     vec3 operator + (const vec3& v) const
     {
@@ -89,19 +89,19 @@ struct vec3 final
         return *this = *this / k;
     }
     
-    vec3 operator - ()
+    vec3 operator - () const
     {
         return vec3(-x, -y, -z);
     }
 
-    bool operator == (const vec3& obj) const
+    bool operator == (const vec3& v) const
     {
-        return (x == obj.x) && (y == obj.y) && (z == obj.z);
+        return (x == v.x) && (y == v.y) && (z == v.z);
     }
 
-    bool operator != (const vec3& obj) const
+    bool operator != (const vec3& v) const
     {
-        return (x != obj.x) || (y != obj.y) || (z != obj.z);
+        return (x != v.x) || (y != v.y) || (z != v.z);
     }
     
     T magnitute2() const
@@ -119,7 +119,7 @@ struct vec3 final
         return *this /= magnitute();
     }
 
-    vec3 normalized()
+    vec3 normalized() const
     {
         return *this / magnitute();
     }
@@ -132,7 +132,7 @@ struct vec3 final
 };
 
 template <typename T>
-inline vec3<T> cross (const vec3<T>& u, const vec3<T>& v)
+inline vec3<T> cross(const vec3<T>& u, const vec3<T>& v)
 {
     return vec3<T>(u.y * v.z - u.z * v.y,
                    u.z * v.x - u.x * v.z,
@@ -140,7 +140,7 @@ inline vec3<T> cross (const vec3<T>& u, const vec3<T>& v)
 }
 
 template <typename T>
-inline T dot (const vec3<T>& u, const vec3<T>& v)
+inline T dot(const vec3<T>& u, const vec3<T>& v)
 {
     return u.x * v.x + u.y * v.y + u.z * v.z;
 }
@@ -152,11 +152,11 @@ inline vec3<T> operator * (T k, const vec3<T>& v)
 }
 
 template <typename T>
-inline vec3<T> sign (const vec3<T>& v)
+inline vec3<T> sign(const vec3<T>& v)
 {
-    const T ZERO    = static_cast<T>(0);
-    const T POS_ONE = static_cast<T>(+1);
-    const T NEG_ONE = static_cast<T>(-1);
+    constexpr T ZERO    = static_cast<T>(0);
+    constexpr T POS_ONE = static_cast<T>(+1);
+    constexpr T NEG_ONE = static_cast<T>(-1);
 
     return vec3<T>((v.x > ZERO) ? POS_ONE : (v.x < ZERO) ? NEG_ONE : ZERO,
                    (v.y > ZERO) ? POS_ONE : (v.y < ZERO) ? NEG_ONE : ZERO,
@@ -164,7 +164,7 @@ inline vec3<T> sign (const vec3<T>& v)
 }
 
 template <typename T>
-inline vec3<T> round (const vec3<T>& v)
+inline vec3<T> round(const vec3<T>& v)
 {
     return vec3<T>(round(v.x), round(v.y), round(v.z));
 }

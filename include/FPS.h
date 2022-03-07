@@ -8,7 +8,6 @@ namespace puza {
 class FPS final : public sf::Drawable
 {
 public:
-
     explicit FPS(const sf::Font& font, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
         unsigned int size = 20, sf::Color color = sf::Color::White);
 
@@ -19,7 +18,6 @@ public:
     bool is_visible_ = true;
 
 private:
-
     sf::Clock dt_clock_;
     sf::Text  fps_text_;
     const sf::Font& font_;

@@ -20,12 +20,11 @@ void RayTracer::updateWinSizes(const vec2u& winsizes)
 
     render_texture_.create(winsizes.x, winsizes.y);
     frame_ = sf::Sprite(render_texture_.getTexture());
+    shader_.setUniform("winsizes", sf::Glsl::Vec2(winsizes_.x, winsizes_.y));
 }
 
 void RayTracer::draw(sf::RenderTarget& target)
 {
-    shader_.setUniform("winsizes", sf::Glsl::Vec2(winsizes_.x, winsizes_.y));
-
     setCamera();
     setScene();
 
@@ -63,6 +62,8 @@ void RayTracer::makeShader()
     char* str_shader = writeShader();
 
     shader_.loadFromMemory(str_shader, sf::Shader::Fragment);
+
+    shader_.setUniform("winsizes", sf::Glsl::Vec2(winsizes_.x, winsizes_.y));
     setMaterials();
 
     delete [] str_shader;
@@ -373,7 +374,7 @@ void RayTracer::setCamera()
 
 void RayTracer::setScene()
 {
-    char* var = new char[64] {};
+    char var[64] {};
 
     for (unsigned int i = 0; i < lights_.size(); ++i)
     {
@@ -397,13 +398,11 @@ void RayTracer::setScene()
     shader_.setUniform("chunks[1]", world_->getMap_1());
     shader_.setUniform("chunks[2]", world_->getMap_2());
     shader_.setUniform("chunks[3]", world_->getMap_3());
-
-    delete [] var;
 }
 
 void RayTracer::setMaterials()
 {
-    char* var = new char[64] {};
+    char var[64] {};
 
     for (unsigned int i = 0; i < MATERIALS_NUM; ++i)
     {
@@ -419,8 +418,6 @@ void RayTracer::setMaterials()
         sprintf(var, "textures[%d]", i);
         shader_.setUniform(var, MATERIALS[i].texture);
     }
-
-    delete[] var;
 }
 
 } // namespace puza

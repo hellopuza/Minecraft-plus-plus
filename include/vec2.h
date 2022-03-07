@@ -12,9 +12,9 @@ struct vec2 final
     T x = 0;
     T y = 0;
 
-    vec2 () {}
+    vec2() {}
 
-    vec2 (T x_, T y_) : x(x_), y(y_) {}
+    vec2(T x_, T y_) : x(x_), y(y_) {}
     
     vec2 operator + (const vec2& v) const
     {
@@ -82,27 +82,27 @@ struct vec2 final
         return *this = *this / k;
     }
     
-    vec2 operator - ()
+    vec2 operator - () const
     {
         return vec2(-x, -y);
     }
 
-    bool operator == (const vec2& obj) const
+    bool operator == (const vec2& v) const
     {
-        return (x == obj.x) && (y == obj.y);
+        return (x == v.x) && (y == v.y);
     }
 
-    bool operator != (const vec2& obj) const
+    bool operator != (const vec2& v) const
     {
-        return (x != obj.x) || (y != obj.y);
+        return (x != v.x) || (y != v.y);
     }
     
-    T magnitute2 () const
+    T magnitute2() const
     {
         return x * x + y * y;
     }
     
-    T magnitute () const
+    T magnitute() const
     {
         return std::sqrt(magnitute2());
     }
@@ -112,7 +112,7 @@ struct vec2 final
         return *this /= magnitute();
     }
 
-    vec2 normalized()
+    vec2 normalized() const
     {
         return *this / magnitute();
     }
@@ -139,9 +139,9 @@ inline T dot (const vec2<T>& u, const vec2<T>& v)
 template <typename T>
 inline vec2<T> sign(const vec2<T>& v)
 {
-    const T ZERO    = static_cast<T>(0);
-    const T POS_ONE = static_cast<T>(+1);
-    const T NEG_ONE = static_cast<T>(-1);
+    constexpr T ZERO    = static_cast<T>(0);
+    constexpr T POS_ONE = static_cast<T>(+1);
+    constexpr T NEG_ONE = static_cast<T>(-1);
 
     return vec2<T>((v.x > ZERO) ? POS_ONE : (v.x < ZERO) ? NEG_ONE : ZERO,
                    (v.y > ZERO) ? POS_ONE : (v.y < ZERO) ? NEG_ONE : ZERO);

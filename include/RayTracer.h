@@ -21,10 +21,10 @@ public:
 
     void addLight(const vec3f& position, const rgb& color, float diff_intensity, float spec_intensity);
 
-    void setLightPosition      (const vec3f& position, unsigned int i);
-    void setLightColor         (const rgb&   color,    unsigned int i);
-    void setLightDiffIntensity (float diff_intensity, unsigned int i);
-    void setLightSpecIntensity (float spec_intensity, unsigned int i);
+    void setLightPosition     (const vec3f& position, unsigned int i);
+    void setLightColor        (const rgb&   color,    unsigned int i);
+    void setLightDiffIntensity(float diff_intensity, unsigned int i);
+    void setLightSpecIntensity(float spec_intensity, unsigned int i);
 
     void makeShader();
 

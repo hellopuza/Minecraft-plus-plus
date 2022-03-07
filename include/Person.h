@@ -24,15 +24,15 @@ private:
 
     void updateCameraPos();
     void shaking(vec3f movement);
-    void collideFloor(const World& world);
-    void collideRoof(const World& world);
+    void collideFloor(const World& world, float movement);
+    void collideRoof(const World& world, float movement);
     void collideWalls(const World& world, vec3f origin, vec3f& direction);
     void collideWall(const World& world, Intersection& intersection, vec3f origin, vec3f& direction);
 
     const float HEIGHT_ = 1.7F;
     const float LINE_SPEED_ = 3.6F;
     const float BOOST_SPEED_ = 1.8F * LINE_SPEED_;
-    const float JUMP_SPEED_ = 5.0F;
+    const float JUMP_SPEED_ = 5.2F;
     const float GRAVITY_ACCELERATION_ = 12.0F;
     const float HEIGHT_CORRECTION_ = 0.01F;
 

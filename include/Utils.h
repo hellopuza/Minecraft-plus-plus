@@ -12,13 +12,13 @@ const float PI = atanf(1.0f) * 4.0F;
 
 typedef vec3f rgb;
 
-inline bool isNIL (float num)
+inline bool isNIL(float num)
 {
     return std::abs(num) < 1e-3F;
 }
 
 template <typename T>
-inline const T& clamp (const T& value, const T& min, const T& max)
+inline const T& clamp(const T& value, const T& min, const T& max)
 {
     if (value > max) return max;
     if (value < min) return min;
@@ -26,7 +26,7 @@ inline const T& clamp (const T& value, const T& min, const T& max)
 }
 
 template <typename T>
-inline T loop (const T& value, const T& min, const T& max)
+inline T loop(const T& value, const T& min, const T& max)
 {
     T val = value;
     while (val > max) val = val - max + min;
